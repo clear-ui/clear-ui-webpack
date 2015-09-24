@@ -4,8 +4,6 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 var DEBUG = process.env.NODE_ENV !== 'production'
 
-var DIST = path.join(__dirname, 'dist')
-
 var entry = []
 if (DEBUG) entry.push('webpack/hot/dev-server')
 
@@ -88,11 +86,6 @@ var loaders = [
 module.exports = {
     entry: entry,
 
-    output: {
-        path: DIST,
-        filename: 'bundle.js'
-    },
-
 	plugins: plugins,
 
 	module: {
@@ -100,11 +93,14 @@ module.exports = {
 	},
 
 	devtool: DEBUG ? 'source-map' : undefined,
-	devServer: {
-        contentBase: DIST
-    },
+
+	resolve: {
+		alias: {
+			'babel-runtime': path.join(__dirname, 'node_modules/babel-runtime')
+		}
+	},
 	
-	resolveLoaders: {
+	resolveLoader: {
 		modulesDirectories: [
 			'web_loaders', 'web_modules', 'node_loaders', 'node_modules', // default
 			'node_modules/clear-ui-webpack/node_modules'
