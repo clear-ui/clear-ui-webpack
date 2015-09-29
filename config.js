@@ -29,10 +29,19 @@ function loadersToString(loaders) {
 	return res.join('!')
 }
 
-var loaders = [ 
+var cssLoaderOptions = {
+	modules: true,
+	sourceMap: true,
+	localIdentName: DEBUG && '[local]__[hash:base64:5]'
+}
+
+var autoprefixerLoaderOptions = {
+	browsers: ['last 2 versions', 'ios >= 7']
+}
+
+var loaders = [
 	{
 		test: /\.js$/,
-		exclude: /node_modules/,
 		loader: loadersToString({
 			'babel': {
 				optional: ['runtime'],
@@ -47,13 +56,8 @@ var loaders = [
 		loader: ExtractTextPlugin.extract(
 			'style-loader',
 			loadersToString({
-				'css-loader': {
-					modules: true,
-					sourceMap: true
-				},
-				'autoprefixer-loader': {
-					browsers: 'last 2 versions'
-				}
+				'css-loader': cssLoaderOptions,
+				'autoprefixer-loader': autoprefixerLoaderOptions
 			})
 		)
 	},
@@ -63,17 +67,22 @@ var loaders = [
 		loader: ExtractTextPlugin.extract(
 			'style-loader',
 			loadersToString({
-				'css-loader': {
-					modules: true,
-					sourceMap: true,
-					localIdentName: DEBUG && '[local]__[hash:base64:5]'
-				},
-				'autoprefixer-loader': {
-					browsers: ['last 2 versions', 'ios >= 7']
-				},
+				'css-loader': cssLoaderOptions,
+				'autoprefixer-loader': autoprefixerLoaderOptions,
 				'sass-loader': {}
 			})
 		)
+	},
+
+	{
+		test: /\.svg$/,
+		loader: loadersToString({
+			'svg-sprite': {
+				name: '[name]_[hash]',
+				prefixize: true
+			},
+			'image': {}
+		})
 	},
 
 	{
@@ -99,7 +108,7 @@ module.exports = {
 			'babel-runtime': path.join(__dirname, 'node_modules/babel-runtime')
 		}
 	},
-	
+
 	resolveLoader: {
 		modulesDirectories: [
 			'web_loaders', 'web_modules', 'node_loaders', 'node_modules', // default

@@ -15,6 +15,7 @@
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
     "sass-loader": "^2.0.1",
+    "svg-sprite-loader": "0.0.7",
     "style-loader": "^0.12.3",
     "webpack": "^1.10.1"
   }
